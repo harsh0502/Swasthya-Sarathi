@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 import dns from 'dns'; 
 import { generateOTP, sendOTPEmail } from '../utils/emailService.js';
 import OTP from '../Models/OTPModel.js';
- 
+  
 export const validateEmail = async (req, res) => {
   const { email } = req.body;
 

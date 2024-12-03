@@ -7,6 +7,9 @@ import { BASE_URL } from "../../config";
 import signupImg from "../../assets/images/rmlogo.png";
 import "./Signup.css";
 
+
+const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+  
 const Signup = () => {
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -73,7 +76,7 @@ const Signup = () => {
       setErrors({ ...errors, email: 'Email is required' });
       return;
     }
-
+ 
     try {
       setLoading(true);
       const response = await fetch(`${BASE_URL}/api/v1/auth/send-otp`, {
@@ -328,14 +331,20 @@ const Signup = () => {
 
             <div className="form-group">
               <label htmlFor="bloodGroup">Blood Group</label>
-              <input
-                type="text"
+              <select
                 id="bloodGroup"
                 name="bloodGroup"
                 value={formData.bloodGroup}
                 onChange={handleInputChange}
                 required
-              />
+              >
+                <option value="">Select Blood Group</option>
+                {bloodGroups.map((group) => (
+                  <option key={group} value={group}>
+                    {group}
+                  </option>
+                ))}
+              </select>
               {errors.bloodGroup && <span className="error">{errors.bloodGroup}</span>}
             </div>
 

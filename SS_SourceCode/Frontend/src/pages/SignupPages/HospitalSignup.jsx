@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+const types_hos = ["Gov", "Private", "Semi-Gov"];
 
 const HospitalSignup = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -62,7 +63,7 @@ const HospitalSignup = () => {
     if (!formData.contactNo || formData.contactNo.length < 10) newErrors.contactNo = 'Valid phone number is required';
     if (!formData.dof) newErrors.dof = 'Date of foundation is required';
     if (!formData.type) newErrors.type = 'Hospital type is required';
-    if (!formData.registration_no) newErrors.registration_no = 'Registration number is required';
+    if (!formData.registration_no || formData.registration_no.length !== 12) newErrors.registration_no = 'Registration number must be exactly 12 characters';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -297,14 +298,20 @@ const HospitalSignup = () => {
 
             <div className="form-group">
               <label htmlFor="type">Hospital Type</label>
-              <input
-                type="text"
+              <select
                 id="type"
                 name="type"
                 value={formData.type}
                 onChange={handleInputChange}
                 required
-              />
+              >
+                <option value="">Select Hospital Type</option>
+                {types_hos.map((group) => (
+                  <option key={group} value={group}>
+                    {group}
+                  </option>
+                ))}
+              </select>
               {errors.type && <span className="error">{errors.type}</span>}
             </div>
 
@@ -316,11 +323,11 @@ const HospitalSignup = () => {
                 name="registration_no"
                 value={formData.registration_no}
                 onChange={handleInputChange}
+                maxLength="12"
                 required
               />
               {errors.registration_no && <span className="error">{errors.registration_no}</span>}
             </div>
-
             <button 
               type="submit" 
               className="submit-button"

@@ -1,8 +1,11 @@
+
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import './AddNewDoc.css';
 import { BASE_URL } from "../../config";
 
@@ -12,7 +15,7 @@ const theme = createTheme({
       main: "#05cdec",
     }
   }
-});
+}); 
 
 const AddNewDoctor = () => {
   const { user } = useContext(AuthContext);
@@ -47,6 +50,8 @@ const AddNewDoctor = () => {
     "ENT",
   ];
 
+  const [errors, setErrors] = useState({});
+  
   const handleChange = (event) => {
     const { name, value, files } = event.target;
     if (name === "photo") {
@@ -61,6 +66,11 @@ const AddNewDoctor = () => {
       }));
     }
   };
+  const handlePhoneChange = (value) => {
+    setFormData({ ...formData, phone: value });
+    setErrors({ ...errors, phone: '' });
+  };
+
 
   useEffect(() => {
     const isValid = Object.values(formData).every(value => value !== "" && value !== null);
@@ -158,15 +168,21 @@ const AddNewDoctor = () => {
               onChange={handleChange}
             />
 
-            <label htmlFor="phone">Contact Number</label>
-            <input
-              type="tel"
-              name="phone"
-              id="phone"
-              placeholder="Contact Number"
-              value={formData.phone}
-              onChange={handleChange}
-            />
+          <label htmlFor="phone">Contact Number</label>
+          <PhoneInput
+            country={'in'}
+            name="phone"
+            id="phone"
+            value={formData.phone}
+            onChange={handlePhoneChange}
+            inputProps={{
+              name: 'phone',
+              required: true,
+              autoFocus: true
+            }}
+          />
+          {errors.phone && <span className="error">{errors.phone}</span>}
+
 
             <label htmlFor="gender">Gender</label>
             <select
@@ -212,6 +228,7 @@ const AddNewDoctor = () => {
               placeholder="Years of Experience"
               value={formData.experience}
               onChange={handleChange}
+              min="0"
             />
 
             <label htmlFor="about">About Doctor</label>

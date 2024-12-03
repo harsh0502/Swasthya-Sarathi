@@ -10,7 +10,8 @@ const AppointmentForm = ({ onClose, doctor }) => {
     const patientId = user?._id;
     const navigate = useNavigate();
     const [hospitalId, setHospitalId] = useState(null);
- 
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
     useEffect(() => {
         const fetchHospitalId = async () => {
             try {
@@ -92,6 +93,7 @@ const AppointmentForm = ({ onClose, doctor }) => {
                     <input
                         type="date"
                         name="date"
+                        min = {today}
                         value={formData.date}
                         onChange={handleChange}
                         required
